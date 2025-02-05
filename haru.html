@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>하루 성장 시뮬레이션</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; }
+        .status { margin: 20px; padding: 10px; border: 1px solid #ccc; display: inline-block; }
+        .buttons { margin-top: 10px; }
+        button { margin: 5px; padding: 10px; font-size: 16px; min-width: 100px; height: 50px; }
+        .emoji { font-size: 80px; display: block; margin: 20px auto; }
+    </style>
+</head>
+<body>
+    <h1>하루 성장 시뮬레이션</h1>
+    <div id="haru-img" class="emoji">👶</div>
+    <div class="status" id="status"></div>
+    <div class="buttons">
+        <button onclick="haru.eat()" ontouchstart="haru.eat()">밥 먹기</button>
+        <button onclick="haru.crawl()" ontouchstart="haru.crawl()">기어다니기</button>
+        <button onclick="haru.laugh()" ontouchstart="haru.laugh()">웃기</button>
+    </div>
+    
+    <script>
+        class Haru {
+            constructor(name) {
+                this.name = name;
+                this.age = 1;
+                this.exp = 0;
+                this.level = 1;
+                this.happiness = 50;
+                this.hunger = 50;
+                this.updateStatus();
+            }
+
+            eat() {
+                this.exp += 10;
+                this.hunger -= 20;
+                this.happiness += 5;
+                this.checkLevelUp();
+            }
+
+            crawl() {
+                this.exp += 15;
+                this.hunger += 10;
+                this.happiness += 10;
+                this.checkLevelUp();
+            }
+
+            laugh() {
+                this.exp += 5;
+                this.happiness += 20;
+                this.checkLevelUp();
+            }
+
+            checkLevelUp() {
+                if (this.exp >= this.level * 20) {
+                    this.level++;
+                    this.age++;
+                    this.exp = 0;
+                    alert(`🎉 ${this.name}가(이) 성장했어요! 이제 ${this.age}개월이에요! (레벨 ${this.level})`);
+                    this.updateCharacter();
+                }
+                this.updateStatus();
+            }
+
+            updateCharacter() {
+                const hairStages = ["👶", "👶", "👦", "👦", "🧑", "🧑", "🧑", "🧑", "🧑", "🧑"];
+                let newEmoji = this.level <= 10 ? hairStages[this.level - 1] : "🧑";
+                document.getElementById("haru-img").innerText = newEmoji;
+            }
+
+            updateStatus() {
+                document.getElementById("status").innerHTML = `
+                    <p>📌 <strong>${this.name}의 상태</strong></p>
+                    <p>레벨: ${this.level}, 나이: ${this.age}개월</p>
+                    <p>경험치: ${this.exp}</p>
+                    <p>배고픔: ${this.hunger}, 행복도: ${this.happiness}</p>
+                `;
+            }
+        }
+
+        const haru = new Haru("하루");
+    </script>
+</body>
+</html>
